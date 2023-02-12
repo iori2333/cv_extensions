@@ -7,8 +7,6 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-[tool.isort]
-profile = "black"
 
 [tool.mypy]
 files = "setup.py"
