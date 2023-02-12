@@ -21,7 +21,7 @@ auto alpha_composite(Image &fg, Image &bg) -> Image {
         continue;
       }
       auto blend = dst_pixel[3] * (255 - src_pixel[3]);
-      auto outa255 = blend + dst_pixel[3] * 255;
+      auto outa255 = blend + src_pixel[3] * 255;
       auto coef1 = src_pixel[3] * 255 * 255 / outa255;
       auto coef2 = 255 - coef1;
 
