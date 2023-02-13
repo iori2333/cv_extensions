@@ -1,4 +1,4 @@
-#include "Mat.h"
+#include "Function.h"
 #include <cvext.h>
 #include <pybind11/pybind11.h>
 
@@ -34,15 +34,8 @@ PYBIND11_MODULE(cv_extensions, m) {
         Some other explanation about the subtract function.
     )pbdoc");
 
-  m.def(
-      "alpha_composite",
-      [](PyImage &im1, PyImage &im2) {
-        auto fg = convertMat(im1);
-        auto bg = convertMat(im2);
-        auto out = cv_ext::alpha_composite(fg, bg);
-        return convertImage(out);
-      },
-      R"pbdoc(
+  m.def("alpha_composite", pyFunction(cv_ext::alpha_composite),
+        R"pbdoc(
         Alpha composite two images
 
         Some other explanation about the alpha_composite function.

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.4...3.18)
 project(cv_extensions)
 
+set(CMAKE_CXX_STANDARD 17)
+
 find_package(OpenCV CONFIG REQUIRED)
 
 file(GLOB_RECURSE SRC_FILES cvext/*.cpp)

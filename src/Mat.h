@@ -4,10 +4,13 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-using PyImage = pybind11::array_t<uint8_t>;
+
+namespace py = pybind11;
+using PyImage =
+    py::array_t<::uint8_t, py::array::c_style | py::array::forcecast>;
 using Image = cv_ext::Image;
 
-inline auto convertMat(PyImage &im) -> Image {
+inline auto convertMat(const PyImage &im) -> Image {
   auto buf = im.request();
   int flag{};
   if (buf.ndim == 2) {
@@ -30,3 +33,4 @@ inline auto convertImage(const Image &im) -> PyImage {
     throw std::runtime_error("Unsupported image type2");
   }
 }
+
