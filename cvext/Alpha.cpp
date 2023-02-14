@@ -1,19 +1,25 @@
-#include <Alpha.h>
+#include <Operations.h>
 
 namespace cv_ext {
-auto alpha_composite(Image &fg, Image &bg) -> Image {
-  if (fg.channels() != 4 || bg.channels() != 4) { // check RGB-A
+
+using cv::Point;
+using cv::Rect;
+using std::max;
+using std::min;
+
+auto alpha_composite(const Image &bg, const Image &fg) -> Image {
+  if (bg.channels() != 4 || fg.channels() != 4) { // check RGB-A
     throw std::runtime_error("Unsupported image type");
   }
-  if (fg.rows != bg.rows || fg.cols != bg.cols) {
+  if (bg.rows != fg.rows || bg.cols != fg.cols) {
     throw std::runtime_error("Image size mismatch");
   }
 
-  auto out = Image(fg.rows, fg.cols, CV_8UC4);
-  for (auto i = 0; i < fg.rows; ++i) {
-    for (auto j = 0; j < fg.cols; ++j) {
-      const auto &dst_pixel = fg.at<cv::Vec4b>(i, j);
-      const auto &src_pixel = bg.at<cv::Vec4b>(i, j);
+  auto out = Image(bg.rows, bg.cols, CV_8UC4);
+  for (auto i = 0; i < bg.rows; ++i) {
+    for (auto j = 0; j < bg.cols; ++j) {
+      const auto &dst_pixel = bg.at<cv::Vec4b>(i, j);
+      const auto &src_pixel = fg.at<cv::Vec4b>(i, j);
       auto &out_pixel = out.at<cv::Vec4b>(i, j);
 
       if (src_pixel[3] == 0) {
@@ -36,5 +42,28 @@ auto alpha_composite(Image &fg, Image &bg) -> Image {
     }
   }
   return out;
+}
+
+auto paste(Image &bg, int x, int y, const Image &fg) -> Image {
+  if (bg.channels() != 4 || fg.channels() != 4) { // check RGB-A
+    throw std::runtime_error("Unsupported image type");
+  }
+  auto b = y;
+  auto t = y + fg.rows;
+  auto l = x;
+  auto r = x + fg.cols;
+
+  auto fgCrop =
+      Rect(Point(max(-b, 0), max(-l, 0)),
+           Point(max(bg.rows - b, fg.rows), max(bg.cols - l, fg.cols)));
+  auto fgCropped = fg(fgCrop);
+
+  auto bgCrop = Rect(Point(max(b, 0), max(l, 0)),
+                     Point(min(t, bg.rows), min(r, bg.cols)));
+  auto bgCropped = bg(bgCrop);
+
+  auto ret = alpha_composite(bgCropped, fgCropped);
+  ret.copyTo(bg(bgCrop));
+  return bg;
 }
 } // namespace cv_ext
