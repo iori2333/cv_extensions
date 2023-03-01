@@ -1,0 +1,14 @@
+[requires]
+opencv/4.5.5
+
+[options]
+opencv/4.5.5:with_ffmpeg=False
+opencv/4.5.5:with_gtk=False
+opencv/4.5.5:with_ade=False
+opencv/4.5.5:with_openexr=False
+opencv/4.5.5:contrib_freetype=False
+
+
+[generators]
+CMakeDeps
+CMakeToolchain

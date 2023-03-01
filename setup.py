@@ -48,7 +48,7 @@ class CMakeBuild(build_ext):
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}{os.sep}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
-            "-DCMAKE_TOOLCHAIN_FILE='/home/iori/vcpkg/scripts/buildsystems/vcpkg.cmake'",
+            f"-DCMAKE_TOOLCHAIN_FILE='{self.build_temp}/conan_toolchain.cmake'",
         ]
         build_args = []
         # Adding CMake arguments set as environment variable
@@ -117,6 +117,9 @@ class CMakeBuild(build_ext):
         if not build_temp.exists():
             build_temp.mkdir(parents=True)
 
+        subprocess.run(
+            ["conan", "install", ".", f"--output-folder={self.build_temp}", "--build=missing"], cwd=ext.sourcedir, check=True
+        )
         subprocess.run(
             ["cmake", ext.sourcedir] + cmake_args, cwd=build_temp, check=True
         )

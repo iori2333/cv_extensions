@@ -2,7 +2,7 @@
   "python.formatting.provider": "yapf",
   "cmake.generator": "Ninja",
   "cmake.configureSettings": {
-    "CMAKE_TOOLCHAIN_FILE": "/home/iori/vcpkg/scripts/buildsystems/vcpkg.cmake",
+    "CMAKE_TOOLCHAIN_FILE": "build/conan_toolchain.cmake",
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     "CV_VERSION_INFO": "dev"
   }
