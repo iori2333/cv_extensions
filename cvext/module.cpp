@@ -1,5 +1,5 @@
 #include <Function.h>
-#include <cvext.h>
+#include <Operations.h>
 #include <pybind11/pybind11.h>
 
 #define STRINGIFY(x) #x
@@ -19,14 +19,14 @@ PYBIND11_MODULE(cv_extensions, m) {
            paste
     )pbdoc";
 
-  m.def("alpha_composite", pyFunction(cv_ext::alpha_composite),
+  m.def("alpha_composite", cv_ext::pyFunction(cv_ext::alpha_composite),
         R"pbdoc(
         Alpha composite two images
 
         Some other explanation about the alpha_composite function.
     )pbdoc");
 
-  m.def("paste", pyFunction(cv_ext::paste),
+  m.def("paste", cv_ext::pyFunction(cv_ext::paste),
         R"pbdoc(
         Paste an image to another image
 

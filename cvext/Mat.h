@@ -1,14 +1,14 @@
 #pragma once
 
-#include <cvext.h>
+#include <Operations.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-
 namespace py = pybind11;
+
+namespace cv_ext {
 using PyImage =
     py::array_t<::uint8_t, py::array::c_style | py::array::forcecast>;
-using Image = cv_ext::Image;
 
 inline auto convertMat(const PyImage &im) -> Image {
   auto buf = im.request();
@@ -34,3 +34,4 @@ inline auto convertImage(const Image &im) -> PyImage {
   }
 }
 
+} // namespace cv_ext

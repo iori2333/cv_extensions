@@ -9,14 +9,9 @@ file(GLOB_RECURSE SRC_FILES cvext/*.cpp)
 
 add_subdirectory(pybind11)
 
-add_library(cvext SHARED ${SRC_FILES})
-target_link_libraries(cvext PUBLIC ${OpenCV_LIBS})
-target_include_directories(cvext PRIVATE ${OpenCV_INCLUDE_DIRS})
-target_include_directories(cvext PUBLIC cvext/)
-
-pybind11_add_module(cv_extensions src/module.cpp)
-target_link_libraries(cv_extensions PRIVATE cvext)
-target_include_directories(cv_extensions PRIVATE src/)
+pybind11_add_module(cv_extensions ${SRC_FILES})
+target_link_libraries(cv_extensions PRIVATE ${OpenCV_LIBS})
+target_include_directories(cv_extensions PRIVATE ${OpenCV_INCLUDE_DIRS} cvext/)
 
 # EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
 # define (VERSION_INFO) here.

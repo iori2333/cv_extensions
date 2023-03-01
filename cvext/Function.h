@@ -3,6 +3,8 @@
 #include <Mat.h>
 #include <type_traits>
 
+namespace cv_ext {
+
 template <typename T> constexpr auto py2cv(T &&value) -> decltype(auto) {
   using val_t = std::remove_cvref_t<T>;
   if constexpr (std::is_same_v<val_t, PyImage>) {
@@ -39,3 +41,5 @@ auto pyFunction(Ret (*func)(Args...)) {
     return cv2py(ret);
   };
 }
+
+} // namespace cv_ext
